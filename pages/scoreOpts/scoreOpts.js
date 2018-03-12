@@ -120,7 +120,7 @@ Page({
 
               // 项目
               if ( APPDATA.roleId == 5 || APPDATA.roleId == 6 ) { 
-                if ( APPDATA.projectId == item.ID ) {
+                if ( APPDATA.allowViewLevel3 ) {
                   return true;
                 }
                 return false;
@@ -139,7 +139,7 @@ Page({
 
               // 项目
               if ( APPDATA.roleId == 5 || APPDATA.roleId == 6 ) { 
-                if ( APPDATA.projectId == item.ID ) {
+                if ( APPDATA.allowViewLevel3 ) {
                   return 'allow';
                 }
                 return 'forbid';

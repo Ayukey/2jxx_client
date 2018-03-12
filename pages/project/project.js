@@ -44,7 +44,9 @@ Page({
       currentQuarter: wx.getStorageSync('currentQuarter'),
       allowViewLevel3: options.allowViewLevel3 || null,
       isSummary: options.isSummary || null,
-      noneMargin: options.noneMargin || null
+      noneMargin: options.noneMargin || null,
+      departId: wx.getStorageSync('departId'),
+      projectId: wx.getStorageSync('projectId')
     });
 
     // 获取正常可评分的项目列表
@@ -98,9 +100,16 @@ Page({
           return;
         };
         let listsArr = data.map((item) => {
+          let allowViewLevel3;
+          if (APPDATA.departId) {
+            allowViewLevel3 = APPDATA.allowViewLevel3;
+          } else if (APPDATA.projectId) {
+            allowViewLevel3 = item.ID === APPDATA.projectId ? true : false;
+          }
+          
           return {
             name: item.Name,
-            link: `/pages/scoreOpts/scoreOpts?proName=${item.Name}&proid=${item.ID}&tid=${APPDATA.tid}&totalScore=${item.TotalScore}&isView=${APPDATA.isView}&isSummary=${APPDATA.isSummary}&itemName=${APPDATA.itemName}&allowViewLevel3=${APPDATA.allowViewLevel3}`,
+            link: `/pages/scoreOpts/scoreOpts?proName=${item.Name}&proid=${item.ID}&tid=${APPDATA.tid}&totalScore=${item.TotalScore}&isView=${APPDATA.isView}&isSummary=${APPDATA.isSummary}&itemName=${APPDATA.itemName}&allowViewLevel3=${allowViewLevel3}`,
             total: item.TotalScore ? (module.isFloat(item.TotalScore) ? module.getNum(item.TotalScore) : item.TotalScore) : '',
             isShowScore: true,
             showRank: true
