@@ -18,7 +18,7 @@
       </view>
     </block>
     <view class="table-cell" wx:if="{{!showSaveBtn}}">
-      <view></view>
+      <view>总计</view>
       <view>{{baseSummary}}</view>
       <view>{{totalSummary}}</view>
     </view>
