@@ -1,0 +1,25 @@
+<view class="login">
+  <view class="logo">
+    <image src="/images/logo.png"></image>
+  </view>
+
+  <!-- input -->
+  <view class="input-lists">
+    <view>
+      <label>用户名</label><input type="text" placeholder="请输入用户名" bindinput="getUserName" focus="nameFocus" />
+    </view>
+    <view>
+      <label>密码</label><input type="password" placeholder="请输入密码" bindinput="getUserPwd" />
+    </view>
+  </view>
+  
+  <!-- 登录 -->
+  <view class="btn-area">
+    <button bindtap="loginHandler">登录</button>
+
+    <!-- 修改密码 -->
+    <view class="change-password" bindtap="skipToModify">
+      <text>修改密码</text>
+    </view>
+  </view>
+</view>

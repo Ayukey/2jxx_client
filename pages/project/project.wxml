@@ -1,0 +1,21 @@
+<import src="/template/template.wxml" />
+
+<view class="logo">
+  <image src="/images/logo.png"></image>
+</view>
+<!-- 当前季度 -->
+<view class="season season-project {{noneMargin ? 'noMargin' : ''}}" wx:if="{{!showQuarter}}">{{currentQuarter}}</view>
+<view class="selectQuarter" wx:if="{{showQuarter}}">
+  <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
+    <view class="picker">
+      <!-- 当前查看季度：{{year}}年{{quarterArr[index]}} -->
+      当前选择：{{multiArray[0][multiIndex[0]]}}年{{multiArray[1][multiIndex[1]]}}
+    </view>
+  </picker>
+</view>
+<!-- 项目列表 -->
+<template is="noneData" wx:if="{{!Lists.length}}"></template>
+<template is="infoLists" data="{{Lists}}" wx:if="{{Lists.length}}"></template>
+
+<!-- 版权信息 -->
+<text class="copyright">@上海建工二建集团 版权所有</text>

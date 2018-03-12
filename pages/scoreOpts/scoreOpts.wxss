@@ -1,0 +1,21 @@
+.conclusion{
+  margin-top: 10px;
+}
+
+.textarea-wrap{
+  margin-top: 10px;
+  box-shadow: 0px 5px 10px 0px rgba(11, 83, 137, 0.15);
+}
+
+.textarea-wrap + .btn-area{
+  margin-top: 10px;
+}
+
+textarea{
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  background-color: #fff;
+  box-sizing: border-box;
+  border-radius: 5px;
+}

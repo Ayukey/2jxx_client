@@ -1,0 +1,30 @@
+<view class="container">
+
+  <view class="score-card">
+    <view class="season" wx:if="{{!isView}}">{{currentQuarter}}</view>
+    <!-- 当前季度 -->
+    <view class="selectQuarter" wx:if="{{isView}}">
+      <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
+        <view class="picker">
+          <!-- 当前查看季度：{{year}}年{{quarterArr[index]}} -->
+          当前选择：{{multiArray[0][multiIndex[0]]}}年{{multiArray[1][multiIndex[1]]}}
+        </view>
+      </picker>
+    </view>
+  
+    <!-- 打分详细 -->
+    <view class="score-list" wx:for="{{chargeInfo}}" wx:key="{{index}}" bindtap="skipToTable" data-id="{{item.id}}">
+      <view class="score-name">
+        <view class="type">
+          {{index + 1}}. {{item.userName}}
+          <text class="department" wx:if="{{showDepart}}">({{item.name}})</text>
+          <text class="department" wx:if="{{showProject}}">({{item.name}})</text>
+        </view>
+        <text class="actual-score">{{item.score}}分</text>
+      </view>
+      <!-- <view class="score-label">
+        
+      </view> -->
+    </view>
+  </view>
+</view>

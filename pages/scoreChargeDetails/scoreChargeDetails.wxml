@@ -1,0 +1,21 @@
+<import src="/template/template.wxml" />
+
+<view class="container">
+
+  <view class="score-card">
+    <view class="score-details">
+      <text>{{itemName}}</text><text class="timer">{{totalScore}}分</text>
+    </view>
+  
+    <!-- 打分详细 -->
+    <template is="noneData" wx:if="{{!chargeInfo.length}}"></template>
+    <view class="score-list" wx:for="{{chargeInfo}}" wx:key="{{index}}" bindtap="skipToTable">
+      <view class="score-name">{{item.userName}}</view>
+      <view class="score-label">
+        <view class="department" wx:if="{{showDepart}}">部门: {{item.name}}</view>
+        <view class="department" wx:if="{{showProject}}">项目: {{item.name}}</view>
+        <view class="actual-score">分值: <text>{{item.score}}</text></view>
+      </view>
+    </view>
+  </view>
+</view>

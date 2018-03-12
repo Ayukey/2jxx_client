@@ -1,0 +1,18 @@
+<import src="/template/template.wxml" />
+
+<view class="container {{isView ? '' : 'hasDRM'}} {{isSummary ? 'isSummary' : ''}}">
+  <view class="score-container">
+    <view class="score-details">
+        <text>{{isView ? itemName : proName}}</text><text class="timer">{{isView ? totalScore : currentQuarter}}</text>
+      </view>
+    
+      <!-- 项目列表 -->
+      <template is="noneData" wx:if="{{!Lists.length}}"></template>
+      <template is="infoLists" data="{{Lists}}" wx:if="{{Lists.length}}"></template>
+    
+      <!-- 保存 -->
+      <!-- <view class="btn-area" wx:if="{{showSaveBtn && roleId === 3}}">
+        <button bindtap="submitConclusion">保存</button>
+      </view> -->
+  </view>
+</view>

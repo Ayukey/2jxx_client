@@ -1,0 +1,86 @@
+.change-password {
+  height: 100%;
+  margin-top: 10px;
+  padding-left: 15px;
+  background-color: #fff;
+}
+
+.action-item {
+  position: relative;
+  display: flex;
+  font-size: 13px;
+  color: #333;
+}
+
+.action-item > input {
+  width: calc(100% - 30px);
+  height: 44px;
+  padding-right: 15px;
+  line-height: 44px;
+  box-sizing: border-box;
+}
+
+.action-item:not(:first-child):before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #aeafb3;
+  transform: scaleY(0.5);
+  opacity: .7;
+}
+
+.action-clear {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  width: 12px;
+  height: 12px;
+  background-color: rgba(0, 0, 0, 0.15);
+  transform: translateY(-50%);
+  border-radius: 50%;
+}
+
+.showClearAction + .action-clear {
+  display: block;
+}
+
+.action-clear:before, 
+.action-clear:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  height: 1px;
+  background-color: #fff;
+}
+
+.action-clear:before {
+  transform: translate3d(-50%, -50%, 0) rotate(45deg);
+}
+
+.action-clear:after {
+  transform: translate3d(-50%, -50%, 0) rotate(-45deg);
+}
+
+.error-tips {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: 85%;
+  padding: 5px 8px;
+  transform: translate3d(-50%, -50%, 0);
+  background-color: rgba(0, 0, 0, .8);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.placeholder-color {
+  color: rgba(0, 0, 0, .2);
+}

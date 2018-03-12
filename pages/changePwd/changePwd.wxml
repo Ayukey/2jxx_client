@@ -1,0 +1,10 @@
+<view class="change-password">
+  <view class="action-item" wx:for="{{actionList}}" wx:key="{{item.placeholder}}">
+    <input bindfocus="showClearAction" bindblur="hideClearAction" type="{{item.inputType}}" data-index="{{index}}" placeholder-class="placeholder-color" placeholder="{{item.placeholder}}" bindinput="getUserChangeInfo" value="{{item.model}}" readonly="{{item.readonly}}" /><i class="action-clear" data-index="{{index}}" wx:if="{{item.showClearAction}}" catchtap="clearInput"></i>
+  </view>
+  
+</view>
+
+<!-- 保存 -->
+<view class="btn-area" bindtap="saveNewPwd"><button>保存</button></view>
+<view class="error-tips" wx:if="{{showErrorTips}}">{{errorTips}}</view>

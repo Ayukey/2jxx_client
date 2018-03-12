@@ -1,0 +1,24 @@
+<!-- 信息列表 -->
+<template name="infoLists">
+  <view class="project-lists">
+    <block wx:for="{{Lists}}" wx:key="{{index}}">
+      <view class="navigator-wrap">
+        <navigator url="{{item.link}}" class="{{item.isSummary ? item.viewSummaryClass : item.class }}" hover-class="none">
+          <view class="project-item">
+            <text>{{item.showRank && index + 1}} <text wx:if="{{item.showRank}}">.</text> {{item.name}}</text>
+            <text class="score-num" wx:if="{{item.isShowScore}}">{{item.total}}</text>
+            <image src="/images/arrow-next.png"></image>
+          </view>
+        </navigator>
+        <view class="overlay-prevent" wx:if="{{item.isSummary ? !item.isDRM && item.isSummary : !item.enable && !item.isView}}"></view>
+      </view>
+    </block>
+  </view>
+</template>
+
+<template name="noneData">
+  <view class="none-data">
+      <image src="/images/no-data.png"></image>
+      <view class="none-data-tips">暂无数据</view>
+  </view>
+</template>

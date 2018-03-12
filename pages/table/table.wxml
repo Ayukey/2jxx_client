@@ -1,0 +1,58 @@
+<view class="container">
+  <!-- 保存 -->
+  <view class="btn-area top-save" wx:if="{{showSaveBtn}}">
+    <view class="saveTips">评分完成记得保存!</view>
+    <button bindtap="saveScore">保存</button>
+  </view>
+  <view class="table">
+    <view class="table-cell">
+      <view>名称</view>
+      <view>分值</view>
+      <view>得分</view>
+    </view>
+    <block wx:for="{{tableLists}}" wx:key="{{index}}">
+      <view class="table-cell">
+        <view>{{item.name}}</view>
+        <view>{{item.MaxScore}}</view>
+        <view catchtap="showPopup" data-id="{{item.id}}" data-max="{{item.MaxScore}}">{{item.TotalScore}}</view>
+      </view>
+    </block>
+    <view class="table-cell" wx:if="{{!showSaveBtn}}">
+      <view></view>
+      <view>{{baseSummary}}</view>
+      <view>{{totalSummary}}</view>
+    </view>
+  </view>
+
+  <view class="colu-wrap" wx:if="{{roleId == 3 || roleId == 4 && !scoreType}}">
+    <!-- 总结 -->
+    <view class="score-details conclusion">
+      <text>总结</text>
+    </view>
+    <view class="textarea-wrap" wx:if="{{hiddenTextArea}}">
+      <textarea name="" id="" rows="10" value="{{remarks}}" bindinput="getConclusion"></textarea>
+    </view>
+  </view>
+
+  <!-- 打分项 -->
+  <view class="is-score {{showPopup ? 'showPopup' : 'hiddenPopup'}}">
+    <view catchtap="noneScore" wx:if="{{showNone}}">无该评分项</view>
+    <view catchtap="showScore">进行评分</view>
+    <view catchtap="hidden" class="cancel">取消</view>
+  </view>
+
+  <!-- 输入评分 -->
+  <view class="score-input" wx:if="{{showModal}}">
+    <view>评分</view>
+    <view class="input-area">
+      <input type="digit" value="{{inputVal}}" bindinput="getInputValue" focus="{{focus}}" />
+    </view>
+    <view class="tips">评分不能超出该项最大分值</view>
+    <view class="input-btn">
+      <button bindtap="hidden">取消</button><button class="btn-confirm" catchtap="confirmScore">确定</button>
+    </view>
+  </view>
+
+  <!-- Modal 遮罩层 -->
+  <view class="overlay" wx:if="{{showOverlay}}"></view>
+</view>

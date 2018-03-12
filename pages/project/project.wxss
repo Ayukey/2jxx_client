@@ -1,0 +1,10 @@
+.season-project{
+  height: 40px;
+  margin-top: 5px;
+  /* margin-bottom: -30px; */
+  box-sizing: border-box;
+}
+
+.noMargin {
+  margin-bottom: 0;
+}

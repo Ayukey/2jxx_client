@@ -1,0 +1,156 @@
+.is-score{
+  position: fixed;
+  bottom: 0;
+  z-index: 100;
+  width: 100%;
+  background-color: #fff;
+  text-align: center;
+  font-size: 16px;
+  color: #147acc;
+  transition: transform .2s ease;
+}
+
+.hiddenPopup{
+  transform: translateY(100%);
+}
+
+.showPopup{
+  transform: translateY(0);
+}
+
+.is-score > view{
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.is-score > view:not(:first-child){
+  border-top: 1px solid rgba(204, 204, 204, .5);
+}
+
+.is-score .cancel{
+  color: #aaa;
+}
+
+/* 打分输入框 */
+.score-input{
+  position: fixed;
+  top: 35%;
+  left: 50%;
+  z-index: 2;
+  width: 75%;
+  padding-top: 10px;
+  text-align: center;
+  transform: translate3d(-50%, -50%, 0);
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all .5s ease;
+}
+
+.input-area{
+  padding: 15px 10px 2px;
+}
+
+.input-area > input{
+  width: 200px;
+  height: 30px;
+  margin-right: auto;
+  margin-left: auto;
+  font-size: 15px;
+  border: 1px solid #147acc;
+}
+
+.tips{
+  display: inline-block;
+  position: relative;
+  font-size: 12px;
+  color: #e57e7e;
+}
+
+.tips:before{
+  content: "*";
+  position: absolute;
+  top: 50%;
+  left: -10px;
+  color: #e57e7e;
+  transform: translateY(-50%);
+}
+
+.input-btn{
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20px;
+}
+
+.input-btn > button{
+  width: 50%;
+  color: #fff;
+  font-size: 15px;
+  background-color: #999;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.input-btn > .btn-confirm{
+  background-color: #147acc;
+}
+
+.input-btn > button:after{
+  display: none;
+}
+
+.overlay{
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, .5);
+}
+
+.colu-wrap{
+  padding: 10px;
+}
+
+.textarea-wrap{
+  margin-top: 10px;
+  box-shadow: 0px 5px 10px 0px rgba(11, 83, 137, 0.15);
+}
+
+.textarea-wrap + .btn-area{
+  margin-top: 10px;
+}
+
+textarea{
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  background-color: #fff;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+.top-save{
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  margin-top: 0;
+  padding-right: 16px;
+  padding-left: 16px;
+  padding-bottom: 0;
+}
+
+.saveTips{
+  line-height: 30px;
+  font-size: 13px;
+  color: red;
+}
+
+.top-save button{
+  width: 100px;
+  height: 30px;
+  margin: 0;
+  line-height: 30px;
+  font-size: 14px;
+}

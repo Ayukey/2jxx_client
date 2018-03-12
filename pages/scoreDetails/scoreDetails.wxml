@@ -1,0 +1,19 @@
+<view class="container">
+
+  <view class="score-card">
+    <view class="score-details" wx:if="{{showDetails}}">
+      <text>项目执行力</text><text class="timer">20分</text>
+    </view>
+
+    <view class="season">{{currentQuarter}}</view>
+  
+    <!-- 打分详细 -->
+    <navigator class="score-list" url="/pages/table/table">
+      <view class="score-name">陆新龙</view>
+      <view class="score-label">
+        <view class="department">部门: 施工生产科</view>
+        <view class="actual-score">分值: <text>10</text></view>
+      </view>
+    </navigator>
+  </view>
+</view>

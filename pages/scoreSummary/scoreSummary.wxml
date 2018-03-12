@@ -1,0 +1,10 @@
+<import src="/template/template.wxml" />
+
+<view class="scoreLists">
+  <view class="project-class">请选择打分项</view>
+  <!-- 项目列表 -->
+  <template is="infoLists" data="{{Lists}}"></template>
+  
+  <!-- 版权信息 -->
+  <text class="copyright">@上海建工二建集团 版权所有</text>
+</view>

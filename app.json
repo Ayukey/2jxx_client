@@ -1,0 +1,23 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/scoreDetails/scoreDetails",
+    "pages/changePwd/changePwd",
+    "pages/table/table",
+    "pages/scoreOpts/scoreOpts",
+    "pages/scoreCharge/scoreCharge",
+    "pages/scoreLists/scoreLists",
+    "pages/project/project",
+    "pages/peerReview/peerReview",
+    "pages/login/login",
+    "pages/scoreChargeDetails/scoreChargeDetails",
+    "pages/peerEntrance/peerEntrance"
+  ],
+  "window":{
+    "backgroundColor": "#f0eff5",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#147acc",
+    "navigationBarTitleText": "smxx",
+    "navigationBarTextStyle": "white"
+  }
+}

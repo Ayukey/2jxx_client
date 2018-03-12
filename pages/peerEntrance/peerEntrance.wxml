@@ -1,0 +1,11 @@
+<view class="container">
+  <view class="peerEntrance">
+    <view wx:for="{{peerList}}" wx:key="{{index}}" class="peer-list {{item.isAllow}}">
+      <navigator url="{{item.link}}" class="entrance-item" hover-class="none">{{item.name}}</navigator>
+      <view class="overlay-prevent" wx:if="{{!item.enable}}"></view>
+    </view>
+  </view>
+
+  <!-- 版权信息 -->
+  <text class="copyright">@上海建工二建集团 版权所有</text>
+</view>

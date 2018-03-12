@@ -1,0 +1,40 @@
+.peerEntrance{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-top: 120px;
+}
+
+.peer-list{
+  position: relative;
+  margin-top: 15px;
+}
+
+.peer-list.forbid navigator{
+  opacity: .6;
+}
+
+.peerEntrance navigator{
+  height: 50px;
+  line-height: 50px;
+  padding-right: 16px;
+  padding-left: 16px;
+  background-color: #fff;
+  font-size:14px;
+  color:#323333;
+  box-shadow:0px 5px 10px 0px rgba(11, 83, 137, 0.15);
+  border-radius:5px;  
+}
+
+.peerEntrance .overlay-prevent{
+  display: block;
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+}

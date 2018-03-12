@@ -1,0 +1,22 @@
+<import src="/template/template.wxml" />
+
+<view class="scoreLists">
+  <!-- <view class="project-class" wx:if="{{!isView}}">请选择打分项</view> -->
+  <!-- 项目列表 -->
+  <!-- <template is="infoLists" data="{{Lists}}"></template> -->
+  <div class="table">
+    <view class="table-cell">
+      <view>名称</view>
+      <view>得分</view>
+    </view>
+    <block wx:for="{{Lists}}" wx:key="{{index}}">
+      <view class="table-cell">
+        <view>{{item.name}}</view>
+        <view data-id="{{item.id}}" data-max="{{item.MaxScore}}">{{item.total}}</view>
+      </view>
+    </block>
+  </div>
+  
+  <!-- 版权信息 -->
+  <text class="copyright">@上海建工二建集团 版权所有</text>
+</view>
