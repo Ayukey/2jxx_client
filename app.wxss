@@ -173,7 +173,7 @@ page{
 }
 
 .score-list + .score-list{
-  margin-top: 15px;
+  margin-top: 5px;
 }
 
 .score-name{
@@ -211,8 +211,8 @@ page{
 
 /* 季度 */
 .season{
-  margin-top: -10px;
-  padding-top: 10px;
+  /* margin-top: -10px;
+  padding-top: 10px; */
   /* padding-bottom: 10px; */
   font-size: 14px;
   color: #db7a7a;

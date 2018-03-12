@@ -1,6 +1,6 @@
 import * as module from '../../utils/util';
 let that = null;
-let initYear = '2018'; // 2018年为起始年
+let initYear = module.config.initYear; // 2018年为起始年
 let quarterArr = ['第一季度', '第二季度', '第三季度', '第四季度'];
 
 Page({

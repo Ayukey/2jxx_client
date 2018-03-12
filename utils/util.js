@@ -2,6 +2,7 @@
 //  全局默认配置项
 const isDev = true;
 export const config = {
+  initYear: '2018',
   url: isDev ? 'http://121.43.174.137:82/' : 'https://scapi.sh2j.com/'  // url
 }
 

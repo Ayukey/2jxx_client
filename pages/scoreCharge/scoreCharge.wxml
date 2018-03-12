@@ -1,3 +1,5 @@
+<import src="/template/template.wxml" />
+
 <view class="container">
 
   <view class="score-card">
@@ -13,18 +15,19 @@
     </view>
   
     <!-- 打分详细 -->
-    <view class="score-list" wx:for="{{chargeInfo}}" wx:key="{{index}}" bindtap="skipToTable" data-id="{{item.id}}">
-      <view class="score-name">
-        <view class="type">
-          {{index + 1}}. {{item.userName}}
-          <text class="department" wx:if="{{showDepart}}">({{item.name}})</text>
-          <text class="department" wx:if="{{showProject}}">({{item.name}})</text>
+    <view class="scoreCharge-wrap">
+      <view class="score-list" wx:for="{{chargeInfo}}" wx:key="{{index}}" bindtap="skipToTable" data-id="{{item.id}}">
+          <view class="score-name">
+            <view class="type">
+              {{index + 1}}. {{item.userName}}
+              <text class="department" wx:if="{{showDepart}}">({{item.name}})</text>
+              <text class="department" wx:if="{{showProject}}">({{item.name}})</text>
+            </view>
+            <text class="actual-score">{{item.score}}分</text>
+          </view>
         </view>
-        <text class="actual-score">{{item.score}}分</text>
-      </view>
-      <!-- <view class="score-label">
-        
-      </view> -->
     </view>
+
+    <template is="noneData" wx:if="{{!chargeInfo.length}}"></template>
   </view>
 </view>

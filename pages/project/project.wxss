@@ -1,7 +1,6 @@
 .season-project{
   height: 40px;
-  margin-top: 5px;
-  /* margin-bottom: -30px; */
+  line-height: 40px;
   box-sizing: border-box;
 }
 

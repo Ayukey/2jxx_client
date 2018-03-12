@@ -1,5 +1,7 @@
 import * as module from '../../utils/util';
 let that = null;
+let initYear = module.config.initYear; // 2018年为起始年
+let quarterArr = ['第一季度', '第二季度', '第三季度', '第四季度'];
 
 Page({
   data: {
@@ -11,14 +13,28 @@ Page({
     scoreType: 0, // 0 - 部门负责人, 1 - 项目负责人
     currentIndex: null,
     roleId: null,
-    multiArray: [['2017', '2016'], ['第一季度', '第二季度', '第三季度', '第四季度']],
-    multiIndex: [0, 3],
+    multiArray: [],
+    multiIndex: [],
     showQuarter: true,
     showNone: true
   },
   onLoad (options) {
     that = this;
+    const QuarterInfo = wx.getStorageSync('quarterNum');
+    let [y, q] = QuarterInfo.split('-');
+
+    let yearArr = [];
+    if ( y === initYear ) { // 当前年为起始年2018, 则年份选择只有一个
+      yearArr[0] = initYear;
+    } else {
+      for ( let i = +initYear; i < y; i++ ) {
+        yearArr.unshift(i);
+      }
+    }
+
     that.setData({
+      multiArray: [yearArr, quarterArr],
+      multiIndex: [0, q - 1],
       currentQuarter: wx.getStorageSync('currentQuarter'),
       quarterNum: wx.getStorageSync('quarterNum'),
       roleId: wx.getStorageSync('RoleId'),
