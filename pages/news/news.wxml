@@ -1,0 +1,5 @@
+
+<import src="../../wxParse/wxParse.wxml" />
+<view class="news-container not_in_mm">
+  <template is="wxParse" data="{{wxParseData: article.nodes}}"/>
+</view>

@@ -1,0 +1,82 @@
+
+/* 以下为解析富文本插件样式 */
+.rich_media_title > view {
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-top: 15px;
+    margin-bottom: 10px;
+    line-height: 1.4;
+    font-weight: 400;
+    font-size: 24px;
+    background-color: #fff;
+}
+.rich_media_meta_list {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-bottom: 18px;
+    line-height: 20px;
+    font-size: 0;
+    background-color: #fff;
+}
+.not_in_mm .rich_media_meta_list {
+    position: relative;
+    z-index: 1;
+}
+.rich_media_meta {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+.rich_media_meta_text {
+    color: #8c8c8c;
+}
+.rich_media_meta_list view {
+    font-style: normal;
+}
+@media (-webkit-min-device-pixel-ratio: 2) and (max-device-width: 667px) and (min-device-width: 375px){
+.mm_appmsg .rich_media_inner, .mm_appmsg .rich_media_meta, .mm_appmsg .discuss_list, .mm_appmsg .rich_media_extra, .mm_appmsg .title_tips .tips {
+    font-size: 17px;
+}
+}
+@media (-webkit-min-device-pixel-ratio: 2) and (max-device-width: 667px) and (min-device-width: 375px){
+.mm_appmsg .rich_media_inner, .mm_appmsg .rich_media_meta, .mm_appmsg .discuss_list, .mm_appmsg .rich_media_extra, .mm_appmsg .title_tips .tips {
+    font-size: 17px;
+  }
+}
+
+.not_in_mm .rich_media_meta_nickname {
+    display: inline-block;
+}
+
+.not_in_mm .rich_media_meta_link {
+    display: none;
+}
+
+.news-container {
+  height: 100%;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.news-container .wxParse-section {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+.news-container > .wxParse-section {
+  padding: 25px 15px 15px !important;
+}
+
+
+image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+view, text {
+  font-size: 14px;
+  color: rgb(79, 79, 79);
+}

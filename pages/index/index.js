@@ -2,6 +2,8 @@
 // 获取应用实例
 const app = getApp();
 import * as module from '../../utils/util';
+import news from '../../news.js';
+
 let that = null;
 
 Page({
@@ -13,11 +15,7 @@ Page({
     autoplay: true,
     interval: 3000,
     duration: 500,
-    imgUrls: [
-      '/images/banner.jpg',
-      '/images/banner.jpg',
-      '/images/banner.jpg'
-    ],
+    imgUrls: [],
     currentUser: '',
     userName: '',
     slideIn: false,
@@ -28,6 +26,17 @@ Page({
   },
   onLoad: function () {
     that = this;
+    
+    let tempImgList = [];
+    news.forEach(item => {
+      tempImgList.push({
+        url: item.cover,
+        id: item.id
+      });
+    });
+    that.setData({
+      imgUrls: tempImgList
+    });
 
     wx.getSystemInfo({
       success (res) {
@@ -66,6 +75,12 @@ Page({
         }
       });
     }
+  },
+  onSwiperTap (ev) {
+    let id = ev.target.dataset.id;
+    wx.navigateTo({
+      url: `/pages/news/news?id=${id}`
+    });
   },
   skipToLogin () {
     wx.navigateTo({

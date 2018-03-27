@@ -1,6 +1,7 @@
 {
   "pages":[
     "pages/index/index",
+    "pages/news/news",
     "pages/scoreDetails/scoreDetails",
     "pages/changePwd/changePwd",
     "pages/table/table",
