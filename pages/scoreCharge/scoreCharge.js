@@ -13,6 +13,7 @@ Page({
     scoreType: 0, // 0 - 部门负责人, 1 - 项目负责人
     currentIndex: null,
     roleId: null,
+    USERID: null,
     multiArray: [],
     multiIndex: [],
     showQuarter: true,
@@ -38,6 +39,7 @@ Page({
       currentQuarter: wx.getStorageSync('currentQuarter'),
       quarterNum: wx.getStorageSync('quarterNum'),
       roleId: wx.getStorageSync('RoleId'),
+      USERID: wx.getStorageSync('userId'),
       showSaveBtn: options.showSaveBtn === 'true' ? true : false
     });
     const APPDATA = that.data;
@@ -96,7 +98,7 @@ Page({
     });
 
     const navigatorUrl = APPDATA.isView ? 
-    `/pages/peerReview/peerReview?scoreType=${APPDATA.scoreType}&USERID=${id}` : 
+      `/pages/peerReview/peerReview?scoreType=${APPDATA.scoreType}&USERID=${id}&scoreType=${APPDATA.scoreType}` : 
     `/pages/table/table?scoreType=${APPDATA.scoreType}&USERID=${id}&showSaveBtn=${APPDATA.showSaveBtn}&showNone=${APPDATA.showNone}`;
     wx.navigateTo({
       url: navigatorUrl
@@ -112,11 +114,12 @@ Page({
     const requestUrl = APPDATA.isView ? 'DepartmentSumData/' : 'Departments/';
     module.request(`${requestUrl}GetDepartmentors`, {
       data: {
+        userid: APPDATA.USERID,
         qt: APPDATA.quarterNum
       },
       callback (res) {
         const data = res.Data;
-        if ( !data.length ) return;
+        // if ( !data.length ) return;
         that.setData({
           chargeInfo: data.map((item) => {
             let st = item.TScore;
@@ -137,11 +140,12 @@ Page({
     const requestUrl = APPDATA.isView ? 'ProjectSumData/' : 'Projects/';
     module.request(`${requestUrl}GetProjectors`, {
       data: {
+        userid: APPDATA.USERID,
         qt: APPDATA.quarterNum
       },
       callback (res) {
         const data = res.Data;
-        if ( !data.length ) return;
+        // if ( !data.length ) return;
         that.setData({
           chargeInfo: data.map((item) => {
             let st = item.TScore;
@@ -149,7 +153,7 @@ Page({
               userName: item.UserName,
               id: item.UserID,
               name: item.ProjectName,
-              score: st ? (module.isFloat(st) ? st.toFixed(2) : st) : 0
+              score: st 
             };
           }),
           showProject: true

@@ -48,7 +48,8 @@ Page({
         scoreType: Number(options.scoreType),
         USER_Id: Number(options.USERID),
         showSaveBtn: options.showSaveBtn === 'true' ? true : false,
-        showNone: options.showNone === 'false' ? false : true
+        showNone: options.showNone === 'false' ? false : true,
+        quarter: options.quarter || wx.getStorageSync('quarterNum')
       });
     }
 
@@ -125,6 +126,7 @@ Page({
     module.request('Departments/GetDepartmentScoredTypeAndScore', {
       data: {
         userid: APPDATA.USER_Id,
+        suserid: APPDATA.userid,
         qt: APPDATA.quarter
       },
       callback (res) {

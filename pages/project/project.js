@@ -109,7 +109,7 @@ Page({
           
           return {
             name: item.Name,
-            link: `/pages/scoreOpts/scoreOpts?proName=${item.Name}&proid=${item.ID}&tid=${APPDATA.tid}&totalScore=${item.TotalScore}&isView=${APPDATA.isView}&isSummary=${APPDATA.isSummary}&itemName=${APPDATA.itemName}&allowViewLevel3=${allowViewLevel3}`,
+            link: `/pages/scoreOpts/scoreOpts?proName=${item.Name}&proid=${item.ID}&tid=${APPDATA.tid}&totalScore=${item.TotalScore}&isView=${APPDATA.isView}&isSummary=${APPDATA.isSummary}&itemName=${APPDATA.itemName}&allowViewLevel3=${allowViewLevel3}&quarter=${APPDATA.quarterNum}`,
             total: item.TotalScore ? (module.isFloat(item.TotalScore) ? module.getNum(item.TotalScore) : item.TotalScore) : '',
             isShowScore: true,
             showRank: true

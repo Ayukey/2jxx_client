@@ -1,9 +1,16 @@
 
 //  全局默认配置项
-const isDev = true;
+const isDev = false;
 export const config = {
   initYear: '2018',
-  url: isDev ? 'http://121.43.174.137:82/' : 'https://scapi.sh2j.com/'  // url
+  url: isDev ? 'https://scapi.sh2j.com/' : 'https://scapi.sh2j.com/'  // url
+  // http://localhost:8080/
+
+  // 'https://scapi.sh2j.com/' 
+
+  // http://jg2j.ayukey.cn/
+
+  //http://121.43.174.137:82/
 }
 
 export const isFloat = n => {
@@ -62,13 +69,23 @@ export const request = (interfaceName, options) => {
             errorback = options.errorback || function(){};
       const loginInfo = wx.getStorageSync('loginInfo'); // 获取本地存储登录信息
       
+      // var header = new Object();
+      // header.UserName = wx.getStorageSync('userName');
+
+      var header = {
+        'content-type': 'application/json'
+      };
+
       // Loading
       wx.showLoading({
         title: '加载中...'
       });
       // 小程序https请求
+
+      console.log("发起请求～");
       wx.request({
         url: resUrl,
+        header: header,
         data: options.data,
         method: options.method || 'GET',
         success(res){
@@ -88,11 +105,13 @@ export const request = (interfaceName, options) => {
           }
         },
         fail(err){
+          console.log(err);
           if( typeof(options.errorback) == "function" ){
             options.errorback(err);
           }
         },
         complete(comp){
+          console.log("complete失败");
           if( typeof(options.compback) == "function" ){
             options.compback(comp);
           }

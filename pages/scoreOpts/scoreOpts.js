@@ -38,7 +38,8 @@ Page({
         isSummary: options.isSummary === 'true' ? true : false,
         showSaveBtn: options.showSaveBtn === 'true' ? true : false,
         allowViewLevel3: options.allowViewLevel3 === 'true' ? true : false,
-        hideNoneAction: options.hideNoneAction || ''
+        hideNoneAction: options.hideNoneAction || '',
+        quarter: options.quarter || wx.getStorageSync('quarterNum')
       });
     }
 
@@ -94,7 +95,7 @@ Page({
           let ts = item.TotalScore;
           scoreArr.push({
             name: item.Name,
-            link: `/pages/table/table?tid=${APPDATA.tid}&proid=${APPDATA.proId}&type2Id=${item.ID}&scoreType=2`,
+            link: `/pages/table/table?tid=${APPDATA.tid}&proid=${APPDATA.proId}&type2Id=${item.ID}&scoreType=2&quarter=${APPDATA.quarter}`,
             total: ts == 0 ? ts : (module.isFloat(ts) ? module.getNum(ts) : ts),
             enable: APPDATA.DRMList.indexOf(item.ID) == -1 ? false : true,
             class: APPDATA.DRMList.indexOf(item.ID) == -1 ? 'forbid' : 'allow',
