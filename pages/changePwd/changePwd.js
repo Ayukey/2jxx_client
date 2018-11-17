@@ -1,6 +1,12 @@
-let that = null;
-import * as module from '../../utils/util';
 import MD5 from '../../utils/MD5';
+
+const {
+  Api,
+  wxRequest
+} = require('../../utils/httpclient.js');
+
+const regeneratorRuntime = require('regenerator-runtime');
+import Toast from '../../dist/toast/toast';
 
 Page({
   data: {
@@ -32,132 +38,127 @@ Page({
       showClearAction: '',
       showError: false,
       readonly: false
-    }],
-    errorTips: '',
-    showErrorTips: false
+    }]
   },
-  onLoad () {
-    that = this;
-    let APPDATA = that.data;
-    let tempArr = APPDATA.actionList;
-    let isLogin = wx.getStorageSync('userName');
-    tempArr[0].model = isLogin || '';
-    tempArr[0].readonly = isLogin ? true : false;
-    that.setData({
-      actionList: tempArr
-    });
-    // 设置navBar title
-    wx.setNavigationBarTitle({
-      title: '修改密码'
-    });
-  },
-  getUserChangeInfo (ev) {
-    const APPDATA = that.data;
-    let tempList = APPDATA.actionList;
-    const EV_TARGET = ev.target,
-          EV_DETAIL = ev.detail;
-    let index = EV_TARGET.dataset.index,  // 当前输入input的索引值
-        value = EV_DETAIL.value;          // 当前输入的值
+  onLoad() {
+    let {
+      actionList
+    } = this.data
+    const user = wx.getStorageSync('user');
+    if (user) {
+      actionList[0].model = user.account
+      actionList[0].readonly = true
+    }
 
-    tempList[index].model = value;
-    that.setData({
-      actionList: tempList
+    this.setData({
+      actionList
     });
-  },
-  showClearAction (ev) {
-    that.actionHandler(ev, true);
-  },
-  hideClearAction (ev) {
-    that.actionHandler(ev, false);
-  },
-  actionHandler (ev, boolean) {
-    const APPDATA = that.data;
-    let tempList = APPDATA.actionList;
-    const EV_TARGET = ev.target;
-    let index = EV_TARGET.dataset.index; // 当前输入input的索引值
-    tempList[index].showClearAction = boolean;
 
-    that.setData({
-      actionList: tempList
-    });
   },
-  clearInput (ev) {
-    const APPDATA = that.data;
-    let tempList = APPDATA.actionList;
-    const EV_TARGET = ev.target;
-    let index = EV_TARGET.dataset.index; // 当前输入input的索引值
-    tempList[index].model = '';
+  getUserChangeInfo(ev) {
+    let {
+      actionList
+    } = this.data
+    const tartget = ev.target
+    const detail = ev.detail
+    let index = tartget.dataset.index // 当前输入input的索引值
+    let value = detail.value // 当前输入的值
 
-    that.setData({
-      actionList: tempList
+    actionList[index].model = value;
+
+    this.setData({
+      actionList
     });
   },
-  saveNewPwd () {
-    const APPDATA = that.data;
+  showClearAction(ev) {
+    this.actionHandler(ev, true);
+  },
+  hideClearAction(ev) {
+    this.actionHandler(ev, false);
+  },
+  actionHandler(ev, boolean) {
+    let {
+      actionList
+    } = this.data;
+    const tartget = ev.target
+    let index = tartget.dataset.index; // 当前输入input的索引值
+    actionList[index].showClearAction = boolean;
+
+    this.setData({
+      actionList
+    })
+  },
+  clearInput(ev) {
+    let {
+      actionList
+    } = this.data;
+    const tartget = ev.target
+    let index = tartget.dataset.index; // 当前输入input的索引值
+    actionList[index].model = '';
+
+    this.setData({
+      actionList
+    });
+  },
+  saveNewPwd() {
+    let {
+      actionList
+    } = this.data;
+    let [name, oldPwd, newPwd, confirmPwd] = actionList
     let checkLenReg = /^[a-zA-Z0-9]{6,16}$/;
-    let [name, oldPwd, newPwd, confirmPwd] = APPDATA.actionList;
-    if ( name.model === '' ) {
-      that.showTips('用户名不能为空');
+    if (name.model === '') {
+      Toast.fail('用户名不为空')
       return;
     }
-    if ( oldPwd.model === '' ) {
-      that.showTips('旧密码不能为空');
-      return;
-    }
-
-    if ( newPwd.model === '' ) {
-      that.showTips('新密码不能为空');
+    if (oldPwd.model === '') {
+      Toast.fail('旧密码不为空')
       return;
     }
 
-    if ( !checkLenReg.test(newPwd.model) ) {
-      that.showTips('新密码为6~16位字符，区分大小写');
+    if (newPwd.model === '') {
+      Toast.fail('新密码不为空')
       return;
     }
 
-    if ( confirmPwd.model === '' ) {
-      that.showTips('确认密码不能为空');
+    if (!checkLenReg.test(newPwd.model)) {
+      Toast.fail('新密码为6~16位字符，区分大小写')
       return;
     }
 
-    if ( newPwd.model !== confirmPwd.model ) {
-      that.showTips('密码不一致');
+    if (confirmPwd.model === '') {
+      Toast.fail('确认密码不能为空')
       return;
     }
 
-    let currentUserName = name.model;
-    module.request('UserInfo/ModifyPwd', {
-      method: 'POST',
-      data: {
-        UserName: currentUserName,
-        UserPwd: MD5(oldPwd.model),
-        NewPwd: MD5(newPwd.model)
-      },
-      callback (res) {
-        if ( res.Success ) {
-          wx.setStorageSync('reLogin', true);
-          that.showTips('修改密码成功', true);
-        }
-      }
-    });
+    if (newPwd.model !== confirmPwd.model) {
+      Toast.fail('密码不一致')
+      return;
+    }
+
+    this.changePassword(name.model, oldPwd.model, newPwd.model)
   },
-  showTips (errorTips, isBack) {
-    let timer = null;
 
-    that.setData({
-      showErrorTips: true,
-      errorTips: errorTips
-    });
+  /**
+   * 修改密码
+   */
+  changePassword: async function(name, oldPwd, newPwd) {
+    Toast.loading({
+      mask: true,
+      message: '加载中...'
+    })
 
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      that.setData({
-        showErrorTips: false
-      });
-
-      if ( isBack ) {
-        wx.navigateBack();
-      }
-    }, 2500);
+    try {
+      const resp = await wxRequest(Api.ModifyPwd, 'POST', {
+        account: name,
+        oldPassword: MD5(oldPwd),
+        newPassword: MD5(newPwd)
+      })
+      Toast.success('操作成功');
+      wx.setStorageSync('reLogin', true)
+      wx.navigateBack()
+    }
+    catch (error) {
+      Toast.fail(error);
+    }
   }
 });

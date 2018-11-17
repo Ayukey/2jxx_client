@@ -8,3 +8,5 @@
   <!-- 版权信息 -->
   <text class="copyright">@上海建工二建集团 版权所有</text>
 </view>
+
+<van-toast id="van-toast" />

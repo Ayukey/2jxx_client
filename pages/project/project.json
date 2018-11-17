@@ -1,5 +1,8 @@
 {
   "window": {
     "navigationBarTitleText": "项目"
+  },
+  "usingComponents": {
+    "van-toast": "../../dist/toast/index"
   }
 }

@@ -7,4 +7,5 @@
 
 <!-- 保存 -->
 <view class="btn-area" bindtap="saveNewPwd"><button>保存</button></view>
-<view class="error-tips" wx:if="{{showErrorTips}}">{{errorTips}}</view>
+
+<van-toast id="van-toast" />

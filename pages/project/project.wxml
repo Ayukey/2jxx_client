@@ -9,7 +9,7 @@
   <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
     <view class="picker">
       <!-- 当前查看季度：{{year}}年{{quarterArr[index]}} -->
-      当前选择：{{multiArray[0][multiIndex[0]]}}年{{multiArray[1][multiIndex[1]]}}
+      当前选择：{{multiArray[0][multiIndex[0]]}}年 {{multiArray[1][multiIndex[1]]}}
     </view>
   </picker>
 </view>
@@ -19,3 +19,5 @@
 
 <!-- 版权信息 -->
 <text class="copyright">@上海建工二建集团 版权所有</text>
+
+<van-toast id="van-toast" />
