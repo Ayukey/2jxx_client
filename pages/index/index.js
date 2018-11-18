@@ -6,6 +6,13 @@ import news from '../../news.js';
 
 let that = null;
 
+const {
+  Api,
+  wxRequest
+} = require('../../utils/httpclient.js');
+
+const regeneratorRuntime = require('regenerator-runtime');
+
 Page({
   data: {
     checkScore: [],
@@ -24,9 +31,9 @@ Page({
     screenHeight: 0,
     screenWidth: 0
   },
-  onLoad: function () {
+  onLoad: function() {
     that = this;
-    
+
     let tempImgList = [];
     news.forEach(item => {
       tempImgList.push({
@@ -39,15 +46,15 @@ Page({
     });
 
     wx.getSystemInfo({
-      success (res) {
-       that.setData({
-        screenHeight: res.windowHeight,
-        screenWidth: res.windowWidth
-       });
+      success(res) {
+        that.setData({
+          screenHeight: res.windowHeight,
+          screenWidth: res.windowWidth
+        });
       }
     });
   },
-  onShow () {
+  onShow() {
     // 登录后未显示当前角色菜单 - 待处理
     const APPDATA = that.data;
     const ROLE_ID = wx.getStorageSync('RoleId');
@@ -57,12 +64,14 @@ Page({
       userName: wx.getStorageSync('name')
     });
 
-    if ( ROLE_ID ) {
+    if (ROLE_ID) {
       that.DRM(ROLE_ID);
     }
 
+    this.doLogin()
+
     let reLogin = wx.getStorageSync('reLogin');
-    if ( reLogin ) {
+    if (reLogin) {
       wx.clearStorage();
       that.setData({
         checkScore: [],
@@ -70,38 +79,80 @@ Page({
       });
       wx.navigateTo({
         url: '/pages/login/login',
-        success () {
+        success() {
           wx.removeStorageSync('reLogin');
         }
       });
     }
   },
-  onSwiperTap (ev) {
+  onSwiperTap(ev) {
     let id = ev.target.dataset.id;
     wx.navigateTo({
       url: `/pages/news/news?id=${id}`
     });
   },
-  skipToLogin () {
+  skipToLogin() {
     wx.navigateTo({
       url: '../login/login'
     })
   },
-  checkIsLogin (ev) { // 是否已登录
+  checkIsLogin: async function(ev) { // 是否已登录
     const DATASET = ev.currentTarget.dataset;
     const navigateUrl = DATASET.url;
-    module.checkIsLogin(() => {
-      wx.navigateTo({
-        url: navigateUrl
+    const type = DATASET.type;
+
+    if (type == 1) {
+      try {
+        const data = await wxRequest(Api.GetCurrentQuarter)
+        const QUARTER = data.quarter, // 获取当前季度
+          CURRENT_QUARTER_STR = QUARTER.split('-'),
+          CURRENT_YEAR = CURRENT_QUARTER_STR[0], // 当前年
+          CURRENT_QUARTER = CURRENT_QUARTER_STR[1]; // 当前季度
+        const CURRENT_QUARTER_RESULT = `${CURRENT_YEAR}年第${convertUnit(CURRENT_QUARTER)}季度`;
+        wx.setStorageSync('inActive', data.inActive);
+        // 存储中的季度值与当前季度是否为同一季度
+        wx.setStorageSync('quarterNum', QUARTER); // 数字格式季度值, 用于传参
+        wx.setStorageSync('currentQuarter', CURRENT_QUARTER_RESULT); // 中文格式季度值, 用于显示当前季度
+
+        if (data.inActive) {
+          console.log("here")
+          module.checkIsLogin(() => {
+            wx.navigateTo({
+              url: navigateUrl
+            });
+          });
+        } else {
+          wx.showModal({
+            title: '系统提示',
+            content: '季度考核尚未开始',
+            showCancel: false,
+            confirmText: "好的"
+          });
+        }
+      } catch (error) {
+        console.log(error)
+        wx.showModal({
+          title: '报错了',
+          content: error,
+          showCancel: false,
+          confirmText: "好的"
+        });
+      }
+    } else {
+      module.checkIsLogin(() => {
+        wx.navigateTo({
+          url: navigateUrl
+        });
       });
-    });
+    }
+
   },
-  loginOut () {
+  loginOut() {
     wx.showModal({
       title: '退出登录',
       content: '确定退出当前用户?',
-      success (res) {
-        if ( res.confirm ) {
+      success(res) {
+        if (res.confirm) {
           wx.clearStorage();
           that.setData({
             checkScore: [],
@@ -115,7 +166,7 @@ Page({
       }
     });
   },
-  ballMoveEvent (e) {
+  ballMoveEvent(e) {
     const APPDATA = that.data;
     let touchs = e.touches[0];
     let pageX = touchs.pageX;
@@ -135,27 +186,27 @@ Page({
       ballRight: x
     });
   },
-  slideMenu () {
+  slideMenu() {
     that.setData({
       slideIn: true
     });
   },
-  skipToModifyPwd () {
+  skipToModifyPwd() {
     wx.navigateTo({
       url: '/pages/changePwd/changePwd',
-      success: function(res){
+      success: function(res) {
         that.setData({
           slideIn: false
         });
       }
     })
   },
-  cancelSlideMenu () {
+  cancelSlideMenu() {
     that.setData({
       slideIn: false
     });
   },
-  DRM (roleId) { // 角色权限设置
+  DRM(roleId) { // 角色权限设置
     /**
      * 角色权限(RoleID):
      *     1. 总经理(1)、书记(7) - 全部查询各种成绩
@@ -167,7 +218,7 @@ Page({
      *     5. 项目负责人(5) - 项目评分汇总 + 查看互评得分 + 对部门负责人打分
      *     6. 项目成员(6)   - 项目评分汇总 + 查看互评得分
      */
-    
+
     let baseQuery = [{ // 基础考核查询列表
       name: '项目评分汇总',
       link: '/pages/scoreLists/scoreLists?isView=true&isSummary=true'
@@ -185,11 +236,11 @@ Page({
     }]);
 
     // 设置不同角色权限
-    if ( roleId === 1 || roleId === 2 || roleId === 7 ) { // 总经理/办公室主任/书记(只有查看权限)
+    if (roleId === 1 || roleId === 2 || roleId === 7) { // 总经理/办公室主任/书记(只有查看权限)
       that.setData({
         checkQuery: baseQuery
       });
-    } else if ( roleId === 3 ) { // 部门负责人
+    } else if (roleId === 3) { // 部门负责人
       that.setData({
         checkScore: [{
           name: '项目评分',
@@ -200,7 +251,7 @@ Page({
         }],
         checkQuery: baseQuery
       });
-    } else if ( roleId === 4 ) { // 部门相关人员
+    } else if (roleId === 4) { // 部门相关人员
       that.setData({
         checkScore: [{
           name: '项目评分',
@@ -211,7 +262,7 @@ Page({
           link: '/pages/scoreLists/scoreLists?isView=true&isSummary=true'
         }]
       });
-    } else if ( roleId === 5 ) { // 项目负责人
+    } else if (roleId === 5) { // 项目负责人
       that.setData({
         checkScore: [{
           name: '部门经理考核',
@@ -219,17 +270,17 @@ Page({
         }],
         checkQuery: baseQuery
       });
-    } else if ( roleId === 6 ) { // 项目相关人员
+    } else if (roleId === 6) { // 项目相关人员
       that.setData({
         checkQuery: [{
-          name: '项目评分汇总',
-          link: '/pages/scoreLists/scoreLists?isView=true&isSummary=true'
-        }
-        // , {
-        //   name: '查看项目评分',
-        //   link: '/pages/project/project?isView=true&isQuery=true'
-        // }
-      ]
+            name: '项目评分汇总',
+            link: '/pages/scoreLists/scoreLists?isView=true&isSummary=true'
+          }
+          // , {
+          //   name: '查看项目评分',
+          //   link: '/pages/project/project?isView=true&isQuery=true'
+          // }
+        ]
       });
     }
   },
@@ -252,5 +303,48 @@ Page({
     this.setData({
       duration: e.detail.value
     })
+  },
+
+  // 更新用户信息
+  doLogin: async function() {
+    const userName = wx.getStorageSync("userName")
+    const userPwd = wx.getStorageSync("userPwd")
+
+    if (userName && userPwd) {
+      try {
+        const data = await wxRequest(Api.UserLogin, 'POST', {
+          UserName: userName,
+          UserPwd: userPwd
+        })
+
+        wx.setStorageSync('RoleId', data.roleId);
+        wx.setStorageSync('userId', data.uid);
+        wx.setStorageSync('userName', data.account);
+        wx.setStorageSync('userPwd', data.password);
+        wx.setStorageSync('departId', JSON.stringify(data.departmentIds));
+        wx.setStorageSync('projectId', JSON.stringify(data.projectIds));
+        wx.setStorageSync('name', data.name);
+      } catch (error) {
+        console.log(error)
+      }
+    }
   }
 })
+
+// 转换对应季度为中文
+let convertUnit = (unit) => {
+  switch (unit) {
+    case '1':
+      return '一';
+      break;
+    case '2':
+      return '二';
+      break;
+    case '3':
+      return '三';
+      break;
+    case '4':
+      return '四';
+      break;
+  }
+}

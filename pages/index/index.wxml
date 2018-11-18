@@ -20,7 +20,7 @@
   <view class="project" wx:if="{{checkScore.length}}">
     <view class="project-class">考核评分</view>
     <view class="project-items">
-      <view wx:for="{{checkScore}}" wx:key="{{index}}" data-url="{{item.link}}" catchtap="checkIsLogin">
+      <view wx:for="{{checkScore}}" wx:key="{{index}}" data-url="{{item.link}}" data-type="1" catchtap="checkIsLogin">
         <image src="/images/top-1.png"></image>
         <view>{{item.name}}</view>
       </view>
@@ -31,7 +31,7 @@
   <view class="project" wx:if="{{checkQuery.length}}">
     <view class="project-class project-query">考核查询</view>
     <view class="project-items">
-      <view wx:for="{{checkQuery}}" wx:key="{{index}}" data-url="{{item.link}}" catchtap="checkIsLogin">
+      <view wx:for="{{checkQuery}}" wx:key="{{index}}" data-url="{{item.link}}" data-type="2" catchtap="checkIsLogin">
         <image src="/images/bottom-1.png"></image>
         <view>{{item.name}}</view>
       </view>

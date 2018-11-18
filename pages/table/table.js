@@ -51,7 +51,8 @@ Page({
         OID: Number(options.OID),
         showSaveBtn: options.showSaveBtn === 'true' ? true : false,
         showNone: options.showNone === 'false' ? false : true,
-        quarter: options.quarter || wx.getStorageSync('quarterNum')
+        quarter: options.quarter || wx.getStorageSync('quarterNum'),
+        remarks: options.remark || '',
       });
     }
 
@@ -78,14 +79,14 @@ Page({
         t1id: APPDATA.tid,
         t2id: APPDATA.type2Id,
         pid: APPDATA.proid,
-        year: APPDATA.quarter.split('-')[0],
-        quarter: APPDATA.quarter.split('-')[1],
+        year: parseInt(APPDATA.quarter.split('-')[0]),
+        quarter: parseInt(APPDATA.quarter.split('-')[1]),
       },
       callback(res) {
         const data = res.Data;
         that.setData({
-          remarks: data.Remark,
-          conclusion: data.Remark
+          remarks: APPDATA.remarks,
+          conclusion: APPDATA.remarks
         });
         if (!data.Scores.length) return;
 
@@ -100,8 +101,8 @@ Page({
         uid: APPDATA.USER_Id,
         suid: APPDATA.userid,
         pid: APPDATA.OID,
-        year: APPDATA.quarter.split('-')[0],
-        quarter: APPDATA.quarter.split('-')[1],
+        year: parseInt(APPDATA.quarter.split('-')[0]),
+        quarter: parseInt(APPDATA.quarter.split('-')[1]),
       },
       callback(res) {
         const data = res.Data;
@@ -118,8 +119,8 @@ Page({
         t1id: APPDATA.tid,
         t2id: APPDATA.type2Id,
         pid: APPDATA.proid,
-        year: APPDATA.quarter.split('-')[0],
-        quarter: APPDATA.quarter.split('-')[1],
+        year: parseInt(APPDATA.quarter.split('-')[0]),
+        quarter: parseInt(APPDATA.quarter.split('-')[1]),
       },
       callback(res) {
         const data = res.Data;
@@ -135,8 +136,9 @@ Page({
       data: {
         uid: APPDATA.USER_Id,
         suid: APPDATA.userid,
-        year: APPDATA.quarter.split('-')[0],
-        quarter: APPDATA.quarter.split('-')[1],
+        did: APPDATA.OID,
+        year: parseInt(APPDATA.quarter.split('-')[0]),
+        quarter: parseInt(APPDATA.quarter.split('-')[1]),
       },
       callback(res) {
         const data = res.Data;
@@ -286,7 +288,7 @@ Page({
       return item == saveLists[index].TotalScore;
     });
 
-    if (isChange) {
+    if (isChange && APPDATA.conclusion == APPDATA.remarks) {
       that.successFn();
       return;
     }
@@ -294,13 +296,14 @@ Page({
     module.request('Projects/ProjectScore', {
       method: "POST",
       data: {
-        t1id: APPDATA.type2Id,
+        t1id: APPDATA.tid,
         t2id: APPDATA.type2Id,
-        year: APPDATA.quarter.split('-')[0],
-        quarter: APPDATA.quarter.split('-')[1],
+        year: parseInt(APPDATA.quarter.split('-')[0]),
+        quarter: parseInt(APPDATA.quarter.split('-')[1]),
         pid: APPDATA.proid,
         userid: APPDATA.userid,
-        scstr: scstr
+        scstr: scstr,
+        remark: APPDATA.conclusion || ' '
       },
       callback(res) {
         that.successFn();
@@ -310,6 +313,13 @@ Page({
   saveProjectScoreType() { // 提交项目负责人评分
     const APPDATA = that.data;
     const submitOpts = Object.assign({}, that.getSCStr());
+    submitOpts.year = parseInt(APPDATA.quarter.split('-')[0])
+    submitOpts.quarter = parseInt(APPDATA.quarter.split('-')[1])
+    submitOpts.suid = submitOpts.suserid 
+    submitOpts.uid = submitOpts.userid 
+    submitOpts.pid = APPDATA.OID
+
+    console.log(submitOpts)
 
     // 是否进行了评分操作
     const isChange = APPDATA.alreadyScoreArr.every((item, index) => {
@@ -332,6 +342,11 @@ Page({
   saveDepartmentScoreType() { // 提交部门负责人评分
     const APPDATA = that.data;
     const submitOpts = Object.assign({}, that.getSCStr());
+    submitOpts.year = parseInt(APPDATA.quarter.split('-')[0])
+    submitOpts.quarter = parseInt(APPDATA.quarter.split('-')[1])
+    submitOpts.suid = submitOpts.suserid
+    submitOpts.uid = submitOpts.userid
+    submitOpts.did = APPDATA.OID
 
     // 是否进行了评分操作
     const isChange = APPDATA.alreadyScoreArr.every((item, index) => {
@@ -361,7 +376,7 @@ Page({
         break;
       default:
         that.saveProjectScore(); // 给项目打分
-        that.submitConclusion();
+        // that.submitConclusion();
     }
   },
   getConclusion(ev) { // 获取总结内容
@@ -381,8 +396,8 @@ Page({
         pid: APPDATA.proid,
         t1id: APPDATA.tid,
         t2id: APPDATA.type2Id,
-        year: APPDATA.quarter.split('-')[0],
-        quarter: APPDATA.quarter.split('-')[1],
+        year: parseInt(APPDATA.quarter.split('-')[0]),
+        quarter: parseInt(APPDATA.quarter.split('-')[1]),
         remark: REMARKS || ' '
       },
       callback(res) {

@@ -101,18 +101,25 @@ Page({
           });
           return;
         };
+        
+        
         let listsArr = data.map((item) => {
+          console.log(APPDATA.projectId.length)
           let allowViewLevel3;
-          if (APPDATA.departId) {
+          if (APPDATA.departId.length > 0) {
             allowViewLevel3 = APPDATA.allowViewLevel3;
-          } else if (APPDATA.projectId) {
-            allowViewLevel3 = item.ID === APPDATA.projectId ? true : false;
           }
 
+          if (APPDATA.projectId.length > 0) {
+            console.log(APPDATA.projectId)
+            allowViewLevel3 = APPDATA.projectId.includes(parseInt(item.ProjectID));
+          }
+          
           console.log(item)
+          console.log(allowViewLevel3)
           return {
             name: item.Name,
-            link: `/pages/scoreOpts/scoreOpts?proName=${item.Name}&proid=${item.ID}&tid=${APPDATA.tid}&totalScore=${item.TotalScore}&isView=${APPDATA.isView}&isSummary=${APPDATA.isSummary}&itemName=${APPDATA.itemName}&allowViewLevel3=${allowViewLevel3}&quarter=${APPDATA.quarterNum}`,
+            link: `/pages/scoreOpts/scoreOpts?proName=${item.Name}&proid=${item.ProjectID}&tid=${APPDATA.tid}&totalScore=${item.TotalScore}&isView=${APPDATA.isView}&isSummary=${APPDATA.isSummary}&itemName=${APPDATA.itemName}&allowViewLevel3=${allowViewLevel3}&quarter=${APPDATA.quarterNum}`,
             total: item.TotalScore ? (module.isFloat(item.TotalScore) ? module.getNum(item.TotalScore) : item.TotalScore) : '',
             isShowScore: true,
             showRank: true

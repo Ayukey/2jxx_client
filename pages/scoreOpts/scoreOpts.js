@@ -72,7 +72,7 @@ Page({
           let ts = item.TotalScore;
           scoreArr.push({
             name: item.Name,
-            link: `/pages/table/table?tid=${APPDATA.tid}&proid=${APPDATA.proId}&type2Id=${item.ID}&showSaveBtn=${APPDATA.showSaveBtn}&showNone=${APPDATA.hideNoneAction}`,
+            link: `/pages/table/table?tid=${APPDATA.tid}&proid=${APPDATA.proId}&type2Id=${item.ID}&showSaveBtn=${APPDATA.showSaveBtn}&showNone=${APPDATA.hideNoneAction}&remark=${item.Remark}`,
             total: ts == 0 ? ts : (module.isFloat(ts) ? module.getNum(ts) : ts),
             enable: APPDATA.DRMList.indexOf(item.ID) == -1 ? false : true,
             class: APPDATA.DRMList.indexOf(item.ID) == -1 ? 'forbid' : 'allow',

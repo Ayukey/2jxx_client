@@ -61,6 +61,7 @@ Page({
         
         wx.setStorageSync('userId', data.uid);
         wx.setStorageSync('userName', data.account);
+        wx.setStorageSync('userPwd', data.password);
         wx.setStorageSync('departId', JSON.stringify(data.departmentIds));
         wx.setStorageSync('projectId', JSON.stringify(data.projectIds));
         wx.setStorageSync('name', data.name);
