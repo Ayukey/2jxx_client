@@ -16,7 +16,7 @@
   
     <!-- 打分详细 -->
     <view class="scoreCharge-wrap">
-      <view class="score-list" wx:for="{{chargeInfo}}" wx:key="{{index}}" bindtap="skipToTable" data-id="{{item.id}}">
+      <view class="score-list" wx:for="{{chargeInfo}}" wx:key="{{index}}" bindtap="skipToTable" data-id="{{item.id}}" data-oid="{{item.oid}}">
           <view class="score-name">
             <view class="type">
               {{index + 1}}. {{item.userName}}

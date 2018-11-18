@@ -15,8 +15,8 @@ Page({
     const APPDATA = that.data;
     that.setData({
       quarter: wx.getStorageSync('quarterNum'),
-      departId: wx.getStorageSync('departId'),
-      projectId: wx.getStorageSync('projectId')
+      departId: JSON.parse(wx.getStorageSync('departId')),
+      projectId: JSON.parse(wx.getStorageSync('projectId'))
     });
     
     if ( options ) {
@@ -44,8 +44,9 @@ Page({
     const requestUrl = APPDATA.isSummary ? 'Projects/GetScoreType1' : 'Projects/GetProjectScoreType1AndScore';
     module.request(requestUrl, { // GetScoreType1 废弃
       data: {
-        proid: APPDATA.tid,
-        qt: APPDATA.quarter
+        pid: APPDATA.tid,
+        year: APPDATA.quarter.split('-')[0],
+        quarter: APPDATA.quarter.split('-')[1],
       },
       callback (res) {
         const data = res.Data;

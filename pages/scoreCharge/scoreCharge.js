@@ -93,13 +93,14 @@ Page({
   skipToTable (ev) {
     const APPDATA = that.data;
     const id = ev.currentTarget.dataset.id;
+    const oid = ev.currentTarget.dataset.oid;
     APPDATA.currentIndex = APPDATA.chargeInfo.findIndex((item) => {
       return item.id === id;
     });
 
     const navigatorUrl = APPDATA.isView ? 
-      `/pages/peerReview/peerReview?scoreType=${APPDATA.scoreType}&USERID=${id}&scoreType=${APPDATA.scoreType}` : 
-    `/pages/table/table?scoreType=${APPDATA.scoreType}&USERID=${id}&showSaveBtn=${APPDATA.showSaveBtn}&showNone=${APPDATA.showNone}`;
+      `/pages/peerReview/peerReview?scoreType=${APPDATA.scoreType}&USERID=${id}&OID=${oid}&scoreType=${APPDATA.scoreType}` : 
+      `/pages/table/table?scoreType=${APPDATA.scoreType}&USERID=${id}&OID=${oid}&showSaveBtn=${APPDATA.showSaveBtn}&showNone=${APPDATA.showNone}`;
     wx.navigateTo({
       url: navigatorUrl
     });
@@ -114,8 +115,9 @@ Page({
     const requestUrl = APPDATA.isView ? 'DepartmentSumData/' : 'Departments/';
     module.request(`${requestUrl}GetDepartmentors`, {
       data: {
-        userid: APPDATA.USERID,
-        qt: APPDATA.quarterNum
+        uid: APPDATA.USERID,
+        year: APPDATA.quarterNum.split('-')[0],
+        quarter: APPDATA.quarterNum.split('-')[1],
       },
       callback (res) {
         const data = res.Data;
@@ -127,7 +129,8 @@ Page({
               userName: item.UserName,
               id: item.UserID,
               name: item.DepartmentName,
-              score: st ? (module.isFloat(st) ? st.toFixed(2) : st) : 0
+              score: st ? (module.isFloat(st) ? st.toFixed(2) : st) : 0,
+              oid: item.DepartmentID
             };
           }),
           showDepart: true
@@ -140,8 +143,9 @@ Page({
     const requestUrl = APPDATA.isView ? 'ProjectSumData/' : 'Projects/';
     module.request(`${requestUrl}GetProjectors`, {
       data: {
-        userid: APPDATA.USERID,
-        qt: APPDATA.quarterNum
+        uid: APPDATA.USERID,
+        year: APPDATA.quarterNum.split('-')[0],
+        quarter: APPDATA.quarterNum.split('-')[1],
       },
       callback (res) {
         const data = res.Data;
@@ -153,7 +157,8 @@ Page({
               userName: item.UserName,
               id: item.UserID,
               name: item.ProjectName,
-              score: st 
+              score: st,
+              oid: item.ProjectID
             };
           }),
           showProject: true

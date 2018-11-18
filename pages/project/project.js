@@ -14,17 +14,17 @@ Page({
     currentQuarter: null,
     noneMargin: false
   },
-  onLoad (options) {
+  onLoad(options) {
     that = this;
     const APPDATA = that.data;
     const QuarterInfo = wx.getStorageSync('quarterNum');
     let [y, q] = QuarterInfo.split('-');
 
     let yearArr = [];
-    if ( y === initYear ) { // 当前年为起始年2018, 则年份选择只有一个
+    if (y === initYear) { // 当前年为起始年2018, 则年份选择只有一个
       yearArr[0] = initYear;
     } else {
-      for ( let i = +initYear; i < y; i++ ) {
+      for (let i = +initYear; i < y; i++) {
         yearArr.unshift(i);
       }
     }
@@ -45,12 +45,12 @@ Page({
       allowViewLevel3: options.allowViewLevel3 || null,
       isSummary: options.isSummary || null,
       noneMargin: options.noneMargin || null,
-      departId: wx.getStorageSync('departId'),
-      projectId: wx.getStorageSync('projectId')
+      departId: JSON.parse(wx.getStorageSync('departId')),
+      projectId: JSON.parse(wx.getStorageSync('projectId'))
     });
 
     // 获取正常可评分的项目列表
-    if ( APPDATA.showQuarter ) { // 查看操作
+    if (APPDATA.showQuarter) { // 查看操作
       that.viewProjectScoreLists();
     } else { // 评分操作
       that.getProjectLists();
@@ -61,15 +61,16 @@ Page({
       title: APPDATA.showQuarter ? APPDATA.itemName : '项目'
     });
   },
-  getProjectLists () {
+  getProjectLists() {
     const APPDATA = that.data;
     module.request('Projects/GetCanScoreProjects', {
       data: {
-        qt: APPDATA.quarterNum
+        year: APPDATA.quarterNum.split('-')[0],
+        quarter: APPDATA.quarterNum.split('-')[1],
       },
-      callback (res) {
+      callback(res) {
         const data = res.Data;
-        if( !data.length ) return;
+        if (!data.length) return;
         let listsArr = data.map((item) => {
           return {
             name: item.Name,
@@ -84,16 +85,17 @@ Page({
       }
     });
   },
-  viewProjectScoreLists () {
+  viewProjectScoreLists() {
     const APPDATA = that.data;
     module.request('ProjectSumData/GetProjectScoreType1', {
       data: {
-        qt: APPDATA.quarterNum,
-        tid: parseInt(APPDATA.tid)
+        year: APPDATA.quarterNum.split('-')[0],
+        quarter: APPDATA.quarterNum.split('-')[1],
+        t1id: parseInt(APPDATA.tid)
       },
-      callback (res) {
+      callback(res) {
         const data = res.Data;
-        if( !data.length ) {
+        if (!data.length) {
           that.setData({
             Lists: []
           });
@@ -106,7 +108,8 @@ Page({
           } else if (APPDATA.projectId) {
             allowViewLevel3 = item.ID === APPDATA.projectId ? true : false;
           }
-          
+
+          console.log(item)
           return {
             name: item.Name,
             link: `/pages/scoreOpts/scoreOpts?proName=${item.Name}&proid=${item.ID}&tid=${APPDATA.tid}&totalScore=${item.TotalScore}&isView=${APPDATA.isView}&isSummary=${APPDATA.isSummary}&itemName=${APPDATA.itemName}&allowViewLevel3=${allowViewLevel3}&quarter=${APPDATA.quarterNum}`,
@@ -122,7 +125,7 @@ Page({
       }
     });
   },
-  bindMultiPickerChange (e) {
+  bindMultiPickerChange(e) {
     const APPDATA = that.data;
     const EV_DETAIL_VAL = e.detail.value;
     const MULTI_ARRAY = APPDATA.multiArray;
@@ -133,7 +136,7 @@ Page({
 
     that.viewProjectScoreLists();
   },
-  bindMultiPickerColumnChange (e) {
+  bindMultiPickerColumnChange(e) {
     const APPDATA = that.data;
     let data = {
       multiArray: APPDATA.multiArray,

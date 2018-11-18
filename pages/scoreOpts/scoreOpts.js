@@ -1,5 +1,6 @@
 import * as module from '../../utils/util';
 let that = null;
+let quarterArr = ['第一季度', '第二季度', '第三季度', '第四季度'];
 
 Page({
   data: {
@@ -15,19 +16,23 @@ Page({
     DRMList: [],
     roleId: null
   },
-  onShow () {
+  onShow() {
     that.getRoleDRM();
   },
-  onLoad (options) {
+  onLoad(options) {
+    console.log(options)
     that = this;
     const APPDATA = that.data;
     that.setData({
       roleId: wx.getStorageSync('RoleId'),
-      departId: wx.getStorageSync('departId'),
-      projectId: wx.getStorageSync('projectId')
+      departId: JSON.parse(wx.getStorageSync('departId')),
+      projectId: JSON.parse(wx.getStorageSync('projectId'))
     });
 
-    if ( options ) {
+    const quarter = options.quarter || wx.getStorageSync('quarterNum')  // 获取当前季度    
+    const currentQuarter = `${quarter.split('-')[0]}年 ${quarterArr[quarter.split('-')[1] - 1]}`
+
+    if (options) {
       that.setData({
         tid: options.tid || '',
         proId: options.proid || '',
@@ -39,7 +44,8 @@ Page({
         showSaveBtn: options.showSaveBtn === 'true' ? true : false,
         allowViewLevel3: options.allowViewLevel3 === 'true' ? true : false,
         hideNoneAction: options.hideNoneAction || '',
-        quarter: options.quarter || wx.getStorageSync('quarterNum')
+        quarter,
+        currentQuarter
       });
     }
 
@@ -48,17 +54,18 @@ Page({
       title: APPDATA.isView ? APPDATA.proName : APPDATA.itemName
     });
   },
-  getScoreOpts () { // 项目评分 - 获取可评分列表
+  getScoreOpts() { // 项目评分 - 获取可评分列表
     const APPDATA = that.data;
     module.request('Projects/GetProjectScoreType2', {
       data: {
-        tid: APPDATA.tid,
-        proid: APPDATA.proId,
-        qt: APPDATA.quarter
+        t1id: APPDATA.tid,
+        pid: APPDATA.proId,
+        year: APPDATA.quarter.split('-')[0],
+        quarter: APPDATA.quarter.split('-')[1],
       },
-      callback (res) {
+      callback(res) {
         const data = res.Data;
-        if( !data.Scores.length ) return;
+        if (!data.Scores.length) return;
         const scoreArr = [];
 
         data.Scores.forEach((item, index) => {
@@ -76,20 +83,21 @@ Page({
         that.setData({
           Lists: scoreArr
         });
-      } 
+      }
     });
   },
-  viewScoreOpts () { // 查看评分
+  viewScoreOpts() { // 查看评分
     const APPDATA = that.data;
     module.request('ProjectSumData/GetProjectScoreType2', {
       data: {
-        qt: APPDATA.quarter,
-        tid: APPDATA.tid,
-        proid: APPDATA.proId
+        year: APPDATA.quarter.split('-')[0],
+        quarter: APPDATA.quarter.split('-')[1],
+        t1id: APPDATA.tid,
+        pid: APPDATA.proId
       },
-      callback (res) {
+      callback(res) {
         const data = res.Data;
-        if( !data.Scores.length ) return;
+        if (!data.Scores.length) return;
         const scoreArr = [];
         data.Scores.forEach((item, index) => {
           let ts = item.TotalScore;
@@ -108,20 +116,20 @@ Page({
                * 部门负责人和部门相关人员 -> GetProjectScoreType1 -> 8大条线id一致才可进入三级评分
                */
               // 部门
-              if ( APPDATA.roleId == 3 || APPDATA.roleId == 4 ) { 
-                if ( APPDATA.tid === 10 || APPDATA.tid === 11 ) {
+              if (APPDATA.roleId == 3 || APPDATA.roleId == 4) {
+                if (APPDATA.tid === 10 || APPDATA.tid === 11) {
                   return false;
                 }
 
-                if ( APPDATA.allowViewLevel3 ) {
+                if (APPDATA.allowViewLevel3) {
                   return true;
                 }
                 return false;
               }
 
               // 项目
-              if ( APPDATA.roleId == 5 || APPDATA.roleId == 6 ) { 
-                if ( APPDATA.allowViewLevel3 ) {
+              if (APPDATA.roleId == 5 || APPDATA.roleId == 6) {
+                if (APPDATA.allowViewLevel3) {
                   return true;
                 }
                 return false;
@@ -131,22 +139,22 @@ Page({
             })(),
             viewSummaryClass: (() => {
               // 部门
-              if ( APPDATA.roleId == 3 || APPDATA.roleId == 4 ) { 
-                if ( APPDATA.allowViewLevel3 ) {
+              if (APPDATA.roleId == 3 || APPDATA.roleId == 4) {
+                if (APPDATA.allowViewLevel3) {
                   return 'allow';
                 }
                 return 'forbid';
               }
 
               // 项目
-              if ( APPDATA.roleId == 5 || APPDATA.roleId == 6 ) { 
-                if ( APPDATA.allowViewLevel3 ) {
+              if (APPDATA.roleId == 5 || APPDATA.roleId == 6) {
+                if (APPDATA.allowViewLevel3) {
                   return 'allow';
                 }
                 return 'forbid';
               }
 
-              if ( APPDATA.tid === 10 || APPDATA.tid === 11 ) {
+              if (APPDATA.tid === 10 || APPDATA.tid === 11) {
                 return 'forbid';
               }
               return 'allow';
@@ -160,13 +168,13 @@ Page({
       }
     });
   },
-  getRoleDRM () {
+  getRoleDRM() {
     const APPDATA = that.data;
     module.request('Projects/GetSTMapping2', {
       data: {
         UserID: wx.getStorageSync('userId')
       },
-      callback (res) {
+      callback(res) {
         const data = res.Data;
         that.setData({
           DRMList: data.map((item) => {
@@ -174,7 +182,7 @@ Page({
           }).sort()
         });
         // 获取二级分类的项目评分
-        if ( APPDATA.isView ) {
+        if (APPDATA.isView) {
           that.viewScoreOpts();
         } else {
           that.getScoreOpts();

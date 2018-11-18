@@ -8,12 +8,14 @@ Page({
     scoreType: 0, // 0 - 部门负责人, 1 - 项目负责人
   },
   onLoad (options) {
+    console.log(options)
     that = this;
     that.setData({
       roleId: Number(wx.getStorageSync('RoleId')), // 当前查看角色
       quarterNum: wx.getStorageSync('quarterNum'),
       userId: wx.getStorageSync('userId'),
       USERID: options.USERID,
+      OID: options.OID,
       scoreType: Number(options.scoreType)
     });
 
@@ -44,9 +46,12 @@ Page({
 
     module.request(`${requestUrl}`, {
       data: {
-        userid: APPDATA.USERID,
-        suserid: APPDATA.userId,
-        qt: APPDATA.quarterNum
+        uid: APPDATA.USERID,
+        suid: APPDATA.userId,
+        pid: APPDATA.OID,
+        did: APPDATA.OID,
+        year: APPDATA.quarterNum.split('-')[0],
+        quarter: APPDATA.quarterNum.split('-')[1],
       },
       callback (res) {
         const data = res.Data;

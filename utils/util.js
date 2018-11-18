@@ -1,9 +1,9 @@
 
 //  全局默认配置项
-const isDev = false;
+const isDev = true;
 export const config = {
   initYear: '2018',
-  url: isDev ? 'https://scapi.sh2j.com/' : 'https://scapi.sh2j.com/'  // url
+  url: isDev ? 'http://localhost:8080/' : 'https://scapi.sh2j.com/'  // url
   // http://localhost:8080/
 
   // 'https://scapi.sh2j.com/' 

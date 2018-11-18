@@ -48,20 +48,22 @@ Page({
       },
       callback (res) {
         let data = res.Data;
+
         // 存储当前角色id
         wx.setStorage({
           key: 'RoleId',
-          data: data.RoleID,
+          data: data.roleId,
           success: function(res){
             // 跳转到首页
             wx.navigateBack();
           }
         });
-        wx.setStorageSync('userId', data.ID);
-        wx.setStorageSync('userName', data.UserName);
-        wx.setStorageSync('departId', data.DepartmentID);
-        wx.setStorageSync('projectId', data.ProjectID);
-        wx.setStorageSync('name', data.Name);
+        
+        wx.setStorageSync('userId', data.uid);
+        wx.setStorageSync('userName', data.account);
+        wx.setStorageSync('departId', JSON.stringify(data.departmentIds));
+        wx.setStorageSync('projectId', JSON.stringify(data.projectIds));
+        wx.setStorageSync('name', data.name);
 
         that.getCurrentQuarter();
       }
@@ -69,26 +71,23 @@ Page({
   },
   getCurrentQuarter () {
     // 获取当前季度
-    const QUARTER_STORAGE = wx.getStorageSync('quarterNum');
-    if( !QUARTER_STORAGE ){
-      wx.request({
-        url: `${module.config.url}AppCommon/GetCurrentQuarter`,
-        method: 'GET',
-        success (res) {
-          if( !res.data.Success ) return;
-          const QUARTER = res.data.Data,  // 获取当前季度
-                CURRENT_QUARTER_STR = QUARTER.split('-'),
-                CURRENT_YEAR = CURRENT_QUARTER_STR[0],  // 当前年
-                CURRENT_QUARTER = CURRENT_QUARTER_STR[1]; // 当前季度
-          const CURRENT_QUARTER_RESULT = `${CURRENT_YEAR}年第${convertUnit(CURRENT_QUARTER)}季度`;
-          // 存储中的季度值与当前季度是否为同一季度
-          if( QUARTER_STORAGE !== QUARTER ){
-            wx.setStorageSync('quarterNum', QUARTER); // 数字格式季度值, 用于传参
-            wx.setStorageSync('currentQuarter', CURRENT_QUARTER_RESULT); // 中文格式季度值, 用于显示当前季度
-          }
-        }
-      })
-    }
+    wx.request({
+      url: `${module.config.url}AppCommon/GetCurrentQuarter`,
+      method: 'GET',
+      success(res) {
+        if (!res.data.Success) return;
+        console.log(res.data.Data)
+        const QUARTER = res.data.Data.quarter,  // 获取当前季度
+          CURRENT_QUARTER_STR = QUARTER.split('-'),
+          CURRENT_YEAR = CURRENT_QUARTER_STR[0],  // 当前年
+          CURRENT_QUARTER = CURRENT_QUARTER_STR[1]; // 当前季度
+        const CURRENT_QUARTER_RESULT = `${CURRENT_YEAR}年第${convertUnit(CURRENT_QUARTER)}季度`;
+        wx.setStorageSync('inActive', res.data.Data.inActive);
+        // 存储中的季度值与当前季度是否为同一季度
+        wx.setStorageSync('quarterNum', QUARTER); // 数字格式季度值, 用于传参
+        wx.setStorageSync('currentQuarter', CURRENT_QUARTER_RESULT); // 中文格式季度值, 用于显示当前季度
+      }
+    })
   }
 })
 
