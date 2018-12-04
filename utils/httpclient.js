@@ -1,6 +1,6 @@
 const regeneratorRuntime = require('regenerator-runtime')
 
-const isDev = true
+const isDev = false
 
 const Host = isDev ? "http://localhost:8080/" : "https://scapi.sh2j.com/"
 

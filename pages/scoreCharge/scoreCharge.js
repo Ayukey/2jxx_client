@@ -129,7 +129,7 @@ Page({
               userName: item.UserName,
               id: item.UserID,
               name: item.DepartmentName,
-              score: st ? (module.isFloat(st) ? st.toFixed(2) : st) : 0,
+              score: st || 0,
               oid: item.DepartmentID
             };
           }),

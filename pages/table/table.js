@@ -165,7 +165,7 @@ Page({
         id: item.ID,
         name: item.Name,
         MaxScore: item.MaxScore ? item.MaxScore : item.ScoreLimit,
-        TotalScore: scoreVal === -1 ? '/' : (module.isFloat(scoreVal) ? scoreVal.toFixed(2) : scoreVal)
+        TotalScore: scoreVal === -1 ? '/' : scoreVal
         // TotalScore: item.TotalScore || (APPDATA.showSaveBtn ? '/' : '')
       }
     });

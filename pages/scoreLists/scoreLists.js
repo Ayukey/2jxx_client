@@ -71,7 +71,7 @@ Page({
             isShowScore: false,
             enable: APPDATA.DRMList.indexOf(item.ID) == -1 ? false : true,
             class: APPDATA.DRMList.indexOf(item.ID) == -1 ? 'forbid' : 'allow',
-            total: item.TotalScore ? (module.isFloat(item.TotalScore) ? item.TotalScore.toFixed(2) : item.TotalScore) : '',
+            total: item.TotalScore || '',
             isView: APPDATA.isView,
             isShowScore: true,
             notScoreAction: that.hasNoneScoreAction(item.ID)
