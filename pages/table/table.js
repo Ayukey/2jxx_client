@@ -26,6 +26,7 @@ Page({
     totalSummary: 0,
     showNone: true, // 是否显示 `无该评分项`
     conclusion: '',
+    isChangeConclusion: false,
     hiddenTextArea: true,
     remarks: '',
     alreadyScoreArr: []
@@ -382,7 +383,9 @@ Page({
   getConclusion(ev) { // 获取总结内容
     const APPDATA = that.data;
     const CONCLUSION = ev.detail.value
+    const ISCHANGECONCLUSION = true
     that.setData({
+      isChangeConclusion: ISCHANGECONCLUSION,
       conclusion: CONCLUSION
     });
   },
@@ -423,6 +426,8 @@ Page({
     wx.setStorageSync('alreadyScore', true);
   },
   hidden() {
+    const APPDATA = that.data;
+    console.log(APPDATA.conclusion)
     that.setData({
       showPopup: false,
       showModal: false,
@@ -430,6 +435,12 @@ Page({
       hiddenTextArea: true,
       inputVal: ''
     });
+
+    if (APPDATA.isChangeConclusion) {
+      that.setData({
+        remarks: APPDATA.conclusion
+      });
+    }
   },
   showScore() {
     that.setData({
